@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         String commandLine;
         String prompt = "% ";
-        Scanner scanner = new Scanner(System.in);
+
         UserDatabase userDatabase = new UserDatabase();
 
         Collections.addAll(userDatabase,
@@ -15,25 +15,25 @@ public class Main {
                 );
         outer:
         do {
-            System.out.printf("%s", prompt);
-            commandLine = scanner.nextLine();
+
+            commandLine = getLine(prompt);
             SocialMedia socialMedia;
             switch (commandLine.toLowerCase()) {
                 case "facebook":
                     socialMedia = new Facebook(userDatabase);
-                    socialMedia.shell();
+                    getShell(socialMedia);
                     continue outer;
                 case "twitter":
                     socialMedia = new Twitter(userDatabase);
-                    socialMedia.shell();
+                    getShell(socialMedia);
                     continue outer;
                 case "linkedin":
                     socialMedia = new LinkedIn(userDatabase);
-                    socialMedia.shell();
+                    getShell(socialMedia);
                     continue outer;
                 case "instagram":
                     socialMedia = new Instagram(userDatabase);
-                    socialMedia.shell();
+                    getShell(socialMedia);
                     continue outer;
                 case "exit":
                     break;
@@ -44,4 +44,31 @@ public class Main {
         } while (!commandLine.equalsIgnoreCase("exit"));
     }
 
+    private static void getShell(SocialMedia socialMedia) {
+        int wrongCredentialCounter = 0;
+        do {
+            if (socialMedia.getUserDatabase().authenticate(
+                    new User(getEmail(), getPassword())
+            )) {
+                socialMedia.shell();
+                return;
+            } else
+                System.out.println("Not valid email & password combination");
+        } while(++wrongCredentialCounter < 5);
+    }
+
+    private static String getLine(String prompt) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.printf("%s", prompt);
+        return scanner.nextLine();
+    }
+
+    private static String getEmail() {
+
+        return getLine("login (email) : ");
+    }
+
+    private static String getPassword() {
+        return getLine("password: ");
+    }
 }

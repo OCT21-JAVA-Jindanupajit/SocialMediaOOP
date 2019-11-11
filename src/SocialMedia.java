@@ -33,9 +33,6 @@ public class SocialMedia {
 
     public void shell() {
 
-        while (!login()) {
-            System.out.println("Username or password is incorrect!\n");
-        }
 
         String commandLine;
         Scanner scanner = new Scanner(System.in);
@@ -58,27 +55,7 @@ public class SocialMedia {
         System.out.println("Good bye");
     }
 
-    private boolean login() {
-        String email = getEmail();
-        String password = getPassword();
 
-        User user = new User(email, password);
 
-        return userDatabase.authenticate(user);
-    }
 
-    private String getLine(String prompt) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.printf("%s", prompt);
-        return scanner.nextLine();
-    }
-
-    private String getEmail() {
-
-        return getLine("login (email) : ");
-    }
-
-    private String getPassword() {
-        return getLine("password: ");
-    }
 }
